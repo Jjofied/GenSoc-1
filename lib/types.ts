@@ -1,6 +1,7 @@
 // Core data shapes for groupme.
 // There is deliberately NO gender field on any type. Roles are never linked to who a person is.
 
+/** "admin" is shown as "Teacher" in the UI. */
 export type UserType = "admin" | "student";
 
 export interface User {
@@ -21,12 +22,17 @@ export interface Class {
   studentIds: string[];
 }
 
-/** A group role. Admins can add, rename, or remove roles per class. */
+/** A group role. Teachers can add, rename, or remove roles per class. */
 export interface Role {
   id: string;
   classId: string;
   name: string;
+  /** Neutral glyph, the same everywhere the role appears. */
+  icon: string;
   focus: string;
+  tasks: string[];
+  /** Removed roles stay so past history still reads correctly. */
+  archived?: boolean;
 }
 
 export type ProjectStatus = "upcoming" | "active" | "done";
@@ -37,14 +43,14 @@ export interface Project {
   number: number;
   name: string;
   startDate: string; // ISO date
-  dueDate: string; // ISO date
+  dueDate: string; // ISO date (demo day)
   status: ProjectStatus;
 }
 
 /**
  * full             = every seat taken
  * open             = seats left, project not started (students can still join)
- * not-full-started = seats left after the project started (admin needs to act)
+ * not-full-started = seats left after the project started (teacher needs to act)
  */
 export type GroupStatus = "full" | "open" | "not-full-started";
 
@@ -58,11 +64,8 @@ export interface Group {
   classId: string;
   name: string;
   seats: Seat[];
-  /** Roles this group uses. Admin picks these for smaller groups. */
-  roleIds: string[];
   /** Two people may share a role when seats > roles. */
   allowSharedRoles: boolean;
-  status: GroupStatus;
 }
 
 export type AssignmentSource = "chosen" | "rotated" | "override";
@@ -84,7 +87,12 @@ export interface RoleHistory {
   assignments: Assignment[];
 }
 
-export type PostType = "file" | "meeting" | "deadline";
+export type PostType = "announcement" | "file" | "meeting" | "deadline";
+
+export interface Attachment {
+  name: string;
+  size: string;
+}
 
 export interface Post {
   id: string;
@@ -93,9 +101,8 @@ export interface Post {
   title: string;
   body: string;
   postedAt: string; // ISO datetime
-  /** File name for file posts. */
-  attachment?: string;
-  /** Meeting/deadline date-time. */
+  attachment?: Attachment;
+  /** Meeting/deadline date-time. These posts also show on the calendar. */
   dateTime?: string;
   /** Room or link for meetings. */
   location?: string;
@@ -110,5 +117,6 @@ export interface CalendarEvent {
   title: string;
   start: string; // ISO datetime
   location?: string;
+  attachment?: Attachment;
   postId?: string;
 }

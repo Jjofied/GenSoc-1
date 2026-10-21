@@ -1,18 +1,35 @@
 import type { GroupStatus } from "@/lib/types";
 
-// Color is a hint only; the text label always carries the meaning.
-const STATUS: Record<GroupStatus, { label: string; dot: string }> = {
-  full: { label: "Full", dot: "bg-green-600" },
-  open: { label: "Open seats", dot: "bg-amber-500" },
-  "not-full-started": { label: "Not full – project started", dot: "bg-red-600" },
+// Low-fi: shape + label carry the meaning. No color.
+export const GROUP_STATUS: Record<GroupStatus, { label: string; shape: string }> = {
+  full: { label: "Full", shape: "●" },
+  open: { label: "Open seats", shape: "◐" },
+  "not-full-started": { label: "Not full – project started", shape: "▲" },
 };
 
 export function GroupStatusLabel({ status }: { status: GroupStatus }) {
-  const { label, dot } = STATUS[status];
+  const { label, shape } = GROUP_STATUS[status];
   return (
-    <span className="inline-flex items-center gap-1.5 rounded border border-stone-300 bg-white px-2 py-0.5 text-xs">
-      <span aria-hidden className={`h-2 w-2 rounded-full ${dot}`} />
+    <span
+      className={
+        "inline-flex items-center gap-1.5 whitespace-nowrap rounded border-[1.5px] px-2 py-0.5 text-xs font-semibold " +
+        (status === "not-full-started" ? "border-ink bg-ink text-white" : "border-line bg-white")
+      }
+    >
+      <span aria-hidden>{shape}</span>
       {label}
     </span>
+  );
+}
+
+export function StatusLegend() {
+  return (
+    <ul aria-label="Table status key" className="flex flex-wrap gap-2">
+      {(Object.keys(GROUP_STATUS) as GroupStatus[]).map((s) => (
+        <li key={s}>
+          <GroupStatusLabel status={s} />
+        </li>
+      ))}
+    </ul>
   );
 }

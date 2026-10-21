@@ -1,1 +1,29 @@
 @import "tailwindcss";
+
+/* Low-fi palette: grayscale on purpose. The one accent is for links only. */
+@theme {
+  --color-ink: #1f1f1f;
+  --color-ink-2: #3a3a3a;
+  --color-muted: #5a5a5a;
+  --color-line: #a8a8a8;
+  --color-line-soft: #c8c8c8;
+  --color-fill: #e9e9e9;
+  --color-fill-soft: #f3f3f3;
+  --color-paper: #fafafa;
+  --color-accent: #c4501f;
+  --color-accent-strong: #8f3712;
+
+  --font-sans: var(--font-plex-sans), system-ui, sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, monospace;
+}
+
+@layer base {
+  body {
+    background: var(--color-paper);
+    color: var(--color-ink);
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-ink);
+    outline-offset: 2px;
+  }
+}
