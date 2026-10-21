@@ -8,8 +8,6 @@ import * as seed from "./mock-data";
 import { currentProject, type DataState } from "./selectors";
 import type { Group, Post, Role, UserType } from "./types";
 
-const SESSION_COOKIE = "groupme-session";
-
 export interface DemoState extends DataState {
   viewAs: UserType | null;
   toast: { id: number; text: string } | null;
@@ -109,13 +107,13 @@ function reducer(state: DemoState, action: Action): DemoState {
   }
 }
 
-function writeSessionCookie(viewAs: UserType | null, sharedDevice = false) {
+function writeSessionCookie(name: string, viewAs: UserType | null, sharedDevice = false) {
   document.cookie = viewAs
-    ? `${SESSION_COOKIE}=${viewAs}; path=/; SameSite=Lax${sharedDevice ? "" : "; max-age=2592000"}`
-    : `${SESSION_COOKIE}=; path=/; max-age=0`;
+    ? `${name}=${viewAs}; path=/; SameSite=Lax${sharedDevice ? "" : "; max-age=2592000"}`
+    : `${name}=; path=/; max-age=0`;
 }
 
-function useDemoValue(initialViewAs: UserType | null) {
+function useDemoValue(initialViewAs: UserType | null, sessionCookie: string) {
   const [state, dispatch] = useReducer(reducer, undefined, (): DemoState => ({
     viewAs: initialViewAs,
     roles: seed.roles,
@@ -129,11 +127,11 @@ function useDemoValue(initialViewAs: UserType | null) {
     () => ({
       /** sharedDevice = session cookie that ends when the browser closes. */
       signIn(viewAs: UserType, sharedDevice = false) {
-        writeSessionCookie(viewAs, sharedDevice);
+        writeSessionCookie(sessionCookie, viewAs, sharedDevice);
         dispatch({ type: "sign-in", viewAs });
       },
       signOut() {
-        writeSessionCookie(null);
+        writeSessionCookie(sessionCookie, null);
         dispatch({ type: "sign-out" });
       },
       move: (studentId: string, toGroupId: string | null, seatIndex?: number) =>
@@ -146,7 +144,7 @@ function useDemoValue(initialViewAs: UserType | null) {
       saveSetup: (setup: SetupInput) => dispatch({ type: "save-setup", setup }),
       toast: (text: string | null) => dispatch({ type: "toast", text, id: Date.now() }),
     }),
-    [],
+    [sessionCookie],
   );
 
   return useMemo(() => ({ state, ...actions }), [state, actions]);
@@ -155,8 +153,16 @@ function useDemoValue(initialViewAs: UserType | null) {
 type DemoValue = ReturnType<typeof useDemoValue>;
 const DemoContext = createContext<DemoValue | null>(null);
 
-export function DemoProvider({ initialViewAs, children }: { initialViewAs: UserType | null; children: ReactNode }) {
-  return <DemoContext value={useDemoValue(initialViewAs)}>{children}</DemoContext>;
+export function DemoProvider({
+  initialViewAs,
+  sessionCookie,
+  children,
+}: {
+  initialViewAs: UserType | null;
+  sessionCookie: string;
+  children: ReactNode;
+}) {
+  return <DemoContext value={useDemoValue(initialViewAs, sessionCookie)}>{children}</DemoContext>;
 }
 
 export function useDemo(): DemoValue {
@@ -164,7 +170,3 @@ export function useDemo(): DemoValue {
   if (!value) throw new Error("useDemo must be used inside <DemoProvider>");
   return value;
 }
-
-/** Shows prototype-only controls (View as, previews) in dev, or when the env flag is set. */
-export const showDevTools =
-  process.env.NODE_ENV === "development" || process.env.NEXT_PUBLIC_SHOW_DEV_TOOLS === "true";

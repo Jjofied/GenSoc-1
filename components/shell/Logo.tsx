@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { AppLink as Link } from "@/lib/app-mode";
 
 export function Logo({ href }: { href: string }) {
   return (

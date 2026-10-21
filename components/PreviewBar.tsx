@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/cn";
-import { showDevTools } from "@/lib/demo-store";
+import { useMode } from "@/lib/app-mode";
 
 export interface PreviewGroup {
   /** URL search param this group controls, e.g. "v" or "state". */
@@ -19,7 +19,7 @@ export interface PreviewGroup {
  */
 export function PreviewBar({ groups, current }: { groups: PreviewGroup[]; current: Record<string, string> }) {
   const pathname = usePathname();
-  if (!showDevTools) return null;
+  if (!useMode().devTools) return null;
 
   return (
     <div className="mb-4 flex flex-wrap items-center gap-x-5 gap-y-2 rounded-md border-[1.5px] border-dashed border-line bg-white px-3 py-2">

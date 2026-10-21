@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { AppLink as Link } from "@/lib/app-mode";
 import { useState, type FormEvent } from "react";
 import { PreviewBar } from "@/components/PreviewBar";
 import { ScreenHeader } from "@/components/ScreenHeader";

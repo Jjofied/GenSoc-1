@@ -1,11 +1,11 @@
 "use client";
 
-import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { useEffect, type ReactNode } from "react";
 import { Avatar } from "@/components/ui/Bits";
+import { AppLink as Link, appPath, useAppRouter, useMode } from "@/lib/app-mode";
 import { cn } from "@/lib/cn";
-import { showDevTools, useDemo } from "@/lib/demo-store";
+import { useDemo } from "@/lib/demo-store";
 import { ME_ID, TEACHER_ID } from "@/lib/mock-data";
 import { getUser } from "@/lib/selectors";
 import type { UserType } from "@/lib/types";
@@ -17,8 +17,9 @@ const isActive = (pathname: string, href: string) =>
   pathname === href || (href === "/groups" && pathname === "/groups/role");
 
 export function AppShell({ children }: { children: ReactNode }) {
-  const pathname = usePathname();
-  const router = useRouter();
+  const mode = useMode();
+  const pathname = appPath(usePathname(), mode.base);
+  const router = useAppRouter();
   const { state, signOut, signIn } = useDemo();
   const viewAs = state.viewAs;
   const user = viewAs ? getUser(viewAs === "admin" ? TEACHER_ID : ME_ID) : undefined;
@@ -112,7 +113,14 @@ export function AppShell({ children }: { children: ReactNode }) {
           )}
         </div>
 
-        {showDevTools && viewAs && pathname !== "/" && (
+        {mode.kind === "demo" && (
+          <div role="note" className="flex flex-wrap items-center gap-x-2 gap-y-1 border-b-2 border-ink bg-ink px-4 py-1.5 text-xs text-white md:px-6">
+            <b className="font-mono uppercase tracking-wider">Demo — dummy data</b>
+            <span>No real accounts. Changes reset on reload.</span>
+          </div>
+        )}
+
+        {mode.devTools && viewAs && pathname !== "/" && (
           <div className="flex flex-wrap items-center gap-2 border-b border-dashed border-line bg-fill-soft px-4 py-1.5 text-xs md:px-6">
             <span className="font-mono font-bold uppercase tracking-wider text-muted">Dev</span>
             <span className="text-muted">View as:</span>
@@ -127,7 +135,7 @@ export function AppShell({ children }: { children: ReactNode }) {
                 {ROLE_LABEL[t]}
               </button>
             ))}
-            <span className="text-muted">· Demo changes reset on reload</span>
+            {mode.kind === "live" && <span className="text-muted">· Demo changes reset on reload</span>}
           </div>
         )}
 

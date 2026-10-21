@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { AppLink as Link } from "@/lib/app-mode";
 import { useState } from "react";
 import { GroupStatusLabel } from "@/components/GroupStatusLabel";
 import { PreviewBar } from "@/components/PreviewBar";

@@ -22,6 +22,12 @@ export function RoleGate({
 }) {
   const { state } = useDemo();
   if (state.viewAs === allow) return <>{children}</>;
+  if (!state.viewAs)
+    return (
+      <StateCard kind="info" title="You’re signed out" action={<LinkButton href="/" kind="primary">Sign in</LinkButton>}>
+        Sign in to see this page.
+      </StateCard>
+    );
   return (
     <StateCard
       kind="denied"

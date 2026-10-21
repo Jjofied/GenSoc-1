@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { AppLink as Link } from "@/lib/app-mode";
 import type { ComponentProps, ReactNode } from "react";
 import { cn } from "@/lib/cn";
 

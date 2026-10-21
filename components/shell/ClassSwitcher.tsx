@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { AppLink as Link } from "@/lib/app-mode";
 import { useRef } from "react";
 import { cn } from "@/lib/cn";
 import { classes } from "@/lib/mock-data";

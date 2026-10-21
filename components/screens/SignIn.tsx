@@ -1,6 +1,5 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
 import { RoleChip } from "@/components/RoleChip";
 import { ScreenHeader } from "@/components/ScreenHeader";
@@ -11,6 +10,7 @@ import { Button } from "@/components/ui/Button";
 import { Field, Toggle } from "@/components/ui/Field";
 import { Segmented } from "@/components/ui/Segmented";
 import { PreviewBar } from "@/components/PreviewBar";
+import { useAppRouter } from "@/lib/app-mode";
 import { useDemo } from "@/lib/demo-store";
 import { getUser, activeRoles } from "@/lib/selectors";
 import { ME_ID, TEACHER_ID } from "@/lib/mock-data";
@@ -23,7 +23,7 @@ const DEMO_EMAIL: Record<UserType, string> = {
 
 /** WF01 · Sign in. Mock: any password works; no account is checked. */
 export function SignIn({ preview, signedOut }: { preview: string; signedOut: boolean }) {
-  const router = useRouter();
+  const router = useAppRouter();
   const { state, signIn, toast } = useDemo();
   const [type, setType] = useState<UserType>("student");
   const [email, setEmail] = useState(DEMO_EMAIL.student);
