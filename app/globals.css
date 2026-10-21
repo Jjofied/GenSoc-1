@@ -1,29 +1,70 @@
 @import "tailwindcss";
 
-/* Low-fi palette: grayscale on purpose. The one accent is for links only. */
+/* Hi-fi "fused" style: mint field, ink outlines, hard offset shadows, lavender primary. */
 @theme {
-  --color-ink: #1f1f1f;
-  --color-ink-2: #3a3a3a;
-  --color-muted: #5a5a5a;
-  --color-line: #a8a8a8;
-  --color-line-soft: #c8c8c8;
-  --color-fill: #e9e9e9;
-  --color-fill-soft: #f3f3f3;
-  --color-paper: #fafafa;
-  --color-accent: #c4501f;
-  --color-accent-strong: #8f3712;
+  --color-ink: #23252b;
+  --color-ink-2: #4a4d57;
+  --color-muted: #5f626c;
+  --color-muted-2: #6b6e78;
+  --color-muted-line: #8b8e98;
+  --color-mint: oklch(0.955 0.03 170);
+  --color-mint-2: oklch(0.925 0.035 170);
+  --color-mint-hover: oklch(0.94 0.02 170);
+  --color-mint-line: #c5d3cc;
+  --color-primary: oklch(0.4 0.08 290);
+  --color-primary-hover: oklch(0.46 0.09 290);
+  --color-lavender: oklch(0.93 0.035 290);
 
-  --font-sans: var(--font-plex-sans), system-ui, sans-serif;
-  --font-mono: var(--font-plex-mono), ui-monospace, monospace;
+  /* Status: full / open seats / not full + started (also errors). */
+  --color-ok-bg: #e2f0e5;
+  --color-ok: #1d6332;
+  --color-ok-dot: #2f8a4a;
+  --color-warn-bg: #fbefd6;
+  --color-warn: #6e4a00;
+  --color-warn-dot: #c38a12;
+  --color-bad-bg: #fbe2de;
+  --color-bad: #9a2a1c;
+  --color-bad-dot: #c8402e;
+  --color-bad-line: #f0b9b0;
+
+  /* Legacy names from the low-fi pass, mapped onto the hi-fi palette. */
+  --color-line: var(--color-ink);
+  --color-line-soft: var(--color-mint-line);
+  --color-fill: var(--color-mint-2);
+  --color-fill-soft: var(--color-mint);
+  --color-paper: var(--color-mint);
+  --color-accent: var(--color-primary);
+  --color-accent-strong: var(--color-ink);
+
+  /* Hard offset shadows, never blurred. */
+  --shadow-hard-sm: 2px 2px 0 var(--color-ink);
+  --shadow-hard: 3px 3px 0 var(--color-ink);
+  --shadow-hard-md: 4px 4px 0 var(--color-ink);
+  --shadow-hard-lg: 5px 5px 0 var(--color-ink);
+
+  --font-sans: var(--font-manrope), system-ui, sans-serif;
+  --font-serif: var(--font-instrument-serif), Georgia, serif;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, monospace;
 }
 
 @layer base {
   body {
-    background: var(--color-paper);
+    background: var(--color-mint);
     color: var(--color-ink);
+    font-size: 16px;
+    line-height: 1.5;
   }
   :focus-visible {
-    outline: 2px solid var(--color-ink);
+    outline: 3px solid var(--color-ink);
     outline-offset: 2px;
+  }
+}
+
+/* Shadowed buttons press in by 1px. */
+@utility press {
+  transition: transform 120ms ease, box-shadow 120ms ease;
+  &:not(:disabled):not([aria-disabled="true"]):hover,
+  &:not(:disabled):not([aria-disabled="true"]):active {
+    transform: translate(1px, 1px);
   }
 }

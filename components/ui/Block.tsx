@@ -13,8 +13,8 @@ export function BlockGrid({ children }: { children: ReactNode }) {
 }
 
 /**
- * One card on a screen. `strong` = thick border, the main thing on the screen.
- * `go` adds a link to the related screen in the card header.
+ * One card on a screen: white, ink outline, hard shadow. `strong` = the main thing on the screen
+ * (bigger radius and shadow). `go` adds a link to the related screen under the card header.
  */
 export function Block({
   label,
@@ -39,14 +39,14 @@ export function Block({
       className={cn(
         "flex min-w-0 flex-col gap-3",
         SPAN[span],
-        !bare && "rounded-lg bg-white p-4",
-        !bare && (strong ? "border-[2.5px] border-ink" : "border-[1.5px] border-line"),
+        !bare && "border-[1.5px] border-ink bg-white p-5",
+        !bare && (strong ? "rounded-[18px] shadow-hard-lg md:p-6" : "rounded-2xl shadow-hard-md"),
         className,
       )}
     >
       {(label || go) && (
-        <header className="flex items-baseline justify-between gap-3">
-          {label && <h2 className="text-sm font-semibold">{label}</h2>}
+        <header className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
+          {label && <h2 className="text-xl font-bold">{label}</h2>}
           {go && <GoLink href={go.href}>{go.label}</GoLink>}
         </header>
       )}

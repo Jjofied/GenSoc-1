@@ -22,11 +22,11 @@ export function PreviewBar({ groups, current }: { groups: PreviewGroup[]; curren
   if (!useMode().devTools) return null;
 
   return (
-    <div className="mb-4 flex flex-wrap items-center gap-x-5 gap-y-2 rounded-md border-[1.5px] border-dashed border-line bg-white px-3 py-2">
-      <span className="font-mono text-[11px] font-bold uppercase tracking-wider text-muted">Prototype preview</span>
+    <div className="mb-5 flex flex-wrap items-center gap-x-5 gap-y-2 rounded-xl border-[1.5px] border-dashed border-muted-line bg-white/60 px-3.5 py-2">
+      <span className="font-mono text-xs font-bold uppercase tracking-wider text-muted">Prototype preview</span>
       {groups.map((g) => (
         <div key={g.param} role="group" aria-label={g.label} className="flex flex-wrap items-center gap-1.5">
-          <span className="text-xs text-muted">{g.label}:</span>
+          <span className="text-[13px] text-muted">{g.label}:</span>
           {g.options.map(([value, text]) => {
             const query = { ...current, [g.param]: value };
             const clean = Object.fromEntries(Object.entries(query).filter(([, v]) => v));
@@ -38,8 +38,8 @@ export function PreviewBar({ groups, current }: { groups: PreviewGroup[]; curren
                 aria-current={on ? "true" : undefined}
                 scroll={false}
                 className={cn(
-                  "rounded-full border-[1.2px] px-2.5 py-0.5 text-xs font-semibold",
-                  on ? "border-ink bg-ink text-white" : "border-line hover:border-ink",
+                  "rounded-full border-[1.5px] px-2.5 py-0.5 text-[13px] font-bold",
+                  on ? "border-ink bg-ink text-white" : "border-dashed border-muted-line hover:border-solid hover:border-ink",
                 )}
               >
                 {text}

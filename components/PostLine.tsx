@@ -2,20 +2,22 @@ import type { Post } from "@/lib/types";
 import { POST_TYPE } from "@/lib/labels";
 import { agoLabel } from "@/lib/format";
 
-/** Compact one-line post, for dashboard cards. */
+/** Compact post row, for dashboard cards: type tile, title, attachment + age. */
 export function PostLine({ post }: { post: Post }) {
   const t = POST_TYPE[post.type];
   return (
-    <span className="flex min-w-0 items-center gap-2.5 text-sm">
-      <span aria-hidden className="grid h-7 w-7 flex-none place-items-center rounded border-[1.5px] border-line bg-fill-soft">
+    <span className="flex min-w-0 items-start gap-3">
+      <span aria-hidden style={{ background: t.bg, color: t.fg, border: t.border }} className="grid h-8 w-8 flex-none place-items-center rounded-lg text-[15px]">
         {t.glyph}
       </span>
-      <span className="min-w-0 flex-1 truncate">
+      <span className="min-w-0 flex-1">
         <span className="sr-only">{t.label}: </span>
-        {post.title}
-        {post.attachment && <span className="text-muted"> · {post.attachment.name}</span>}
+        <b className="block truncate">{post.title}</b>
+        <span className="block truncate text-[15px] text-muted">
+          {post.attachment ? `${post.attachment.name} · ` : ""}
+          {agoLabel(post.postedAt)}
+        </span>
       </span>
-      <span className="flex-none text-xs text-muted">{agoLabel(post.postedAt)}</span>
     </span>
   );
 }

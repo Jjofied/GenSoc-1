@@ -30,13 +30,13 @@ export function Modal({
       ref={ref}
       onClose={onClose}
       aria-labelledby="modal-title"
-      className="m-auto w-[min(28rem,calc(100vw-2rem))] rounded-xl border-2 border-ink bg-white p-5 text-ink backdrop:bg-ink/35"
+      className="m-auto w-[min(30rem,calc(100vw-2rem))] rounded-[18px] border-[1.5px] border-ink bg-white p-6 text-ink shadow-hard-lg backdrop:bg-ink/40"
     >
-      <h2 id="modal-title" className="mb-2 text-lg font-bold">
+      <h2 id="modal-title" className="mb-2 text-2xl font-bold">
         {title}
       </h2>
-      <div className="flex flex-col gap-3 text-sm text-ink-2">{children}</div>
-      <div className="mt-4 flex flex-wrap justify-end gap-2">{actions}</div>
+      <div className="flex flex-col gap-3 text-ink-2">{children}</div>
+      <div className="mt-5 flex flex-wrap justify-end gap-2.5">{actions}</div>
     </dialog>
   );
 }

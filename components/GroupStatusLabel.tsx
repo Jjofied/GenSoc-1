@@ -1,23 +1,20 @@
+import { cn } from "@/lib/cn";
 import type { GroupStatus } from "@/lib/types";
 
-// Low-fi: shape + label carry the meaning. No color.
-export const GROUP_STATUS: Record<GroupStatus, { label: string; shape: string }> = {
-  full: { label: "Full", shape: "●" },
-  open: { label: "Open seats", shape: "◐" },
-  "not-full-started": { label: "Not full – project started", shape: "▲" },
+// Color + dot + text label: status is never shown by color alone.
+export const GROUP_STATUS: Record<GroupStatus, { label: string; tone: string; dot: string }> = {
+  full: { label: "Full", tone: "bg-ok-bg text-ok", dot: "bg-ok-dot" },
+  open: { label: "Open seats", tone: "bg-warn-bg text-warn", dot: "bg-warn-dot" },
+  "not-full-started": { label: "Not full – project started", tone: "bg-bad-bg text-bad", dot: "bg-bad-dot" },
 };
 
-export function GroupStatusLabel({ status }: { status: GroupStatus }) {
-  const { label, shape } = GROUP_STATUS[status];
+export function GroupStatusLabel({ status, suffix }: { status: GroupStatus; suffix?: string }) {
+  const { label, tone, dot } = GROUP_STATUS[status];
   return (
-    <span
-      className={
-        "inline-flex items-center gap-1.5 whitespace-nowrap rounded border-[1.5px] px-2 py-0.5 text-xs font-semibold " +
-        (status === "not-full-started" ? "border-ink bg-ink text-white" : "border-line bg-white")
-      }
-    >
-      <span aria-hidden>{shape}</span>
+    <span className={cn("inline-flex items-center gap-1.5 whitespace-nowrap rounded-full px-2.5 py-0.5 text-[13px] font-bold", tone)}>
+      <span aria-hidden className={cn("h-[7px] w-[7px] flex-none rounded-full", dot)} />
       {label}
+      {suffix && ` · ${suffix}`}
     </span>
   );
 }
